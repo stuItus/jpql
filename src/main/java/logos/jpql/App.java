@@ -19,10 +19,15 @@ public class App
     	EntityManager em = factory.createEntityManager();
     	em.getTransaction().begin();
     	
-    
 //    	addTags(em);
 //    	addPost(em);
-    	addComment(em);
+//    	addComment(em);
+    	
+    	List<Comment> comments = em.createQuery("SELECT c FROM Comment c", Comment.class).getResultList();
+//    	comments.forEach(c -> System.out.println(c));
+    	
+    	Comment com = em.createQuery("SELECT c FROM Comment c WHERE c.id = :id", Comment.class).setParameter("id", 40).getSingleResult();
+    	System.out.println(com);
     	
     	em.getTransaction().commit();
     	em.close();
