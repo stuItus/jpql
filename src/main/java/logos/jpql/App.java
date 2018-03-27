@@ -38,9 +38,21 @@ public class App
 //    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.title LIKE :post_title", Post.class).setParameter("post_title", "%8_").getResultList();
 //    	posts.forEach(p -> System.out.println(p));
     	
-    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id BETWEEN :first AND :last", Post.class).setParameter("first", 76).setParameter("last", 82).getResultList();
-    	posts.forEach(p -> System.out.println(p));
+//    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id BETWEEN :first AND :last", Post.class).setParameter("first", 76).setParameter("last", 82).getResultList();
+//    	posts.forEach(p -> System.out.println(p));
     	
+    	// *****************************************************//
+//    	Agreg functions
+    	Long count = em.createQuery("SELECT COUNT(c.id) FROM Comment c", Long.class).getSingleResult();
+    	System.out.println("Count :"+count);
+    	Long sum = em.createQuery("SELECT SUM(c.id) FROM Comment c", Long.class).getSingleResult();
+    	System.out.println("Sum :"+ sum);
+    	Double avg = em.createQuery("SELECT AVG(c.id) FROM Comment c", Double.class).getSingleResult();
+    	System.out.println("Average :"+avg);
+    	Integer max = em.createQuery("SELECT MAX(c.id) FROM Comment c", Integer.class).getSingleResult();
+    	System.out.println("Max :"+max);
+    	Integer min = em.createQuery("SELECT MIN(c.id) FROM Comment c", Integer.class).getSingleResult();
+    	System.out.println("Min :"+min);
     	
     	em.getTransaction().commit();
     	em.close();
