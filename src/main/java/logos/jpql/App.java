@@ -27,7 +27,10 @@ public class App
 //    	comments.forEach(c -> System.out.println(c));
     	
     	Comment com = em.createQuery("SELECT c FROM Comment c WHERE c.id = :id", Comment.class).setParameter("id", 40).getSingleResult();
-    	System.out.println(com);
+//    	System.out.println(com);
+    	
+    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id > :post_id", Post.class).setParameter("post_id", 50).getResultList();
+    	posts.forEach(p -> System.out.println(p));
     	
     	em.getTransaction().commit();
     	em.close();
