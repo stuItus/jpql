@@ -23,14 +23,24 @@ public class App
 //    	addPost(em);
 //    	addComment(em);
     	
-    	List<Comment> comments = em.createQuery("SELECT c FROM Comment c", Comment.class).getResultList();
+//    	List<Comment> comments = em.createQuery("SELECT c FROM Comment c", Comment.class).getResultList();
 //    	comments.forEach(c -> System.out.println(c));
     	
-    	Comment com = em.createQuery("SELECT c FROM Comment c WHERE c.id = :id", Comment.class).setParameter("id", 40).getSingleResult();
+//    	Comment com = em.createQuery("SELECT c FROM Comment c WHERE c.id = :id", Comment.class).setParameter("id", 40).getSingleResult();
 //    	System.out.println(com);
     	
-    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id > :post_id", Post.class).setParameter("post_id", 50).getResultList();
+//    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id > :post_id", Post.class).setParameter("post_id", 50).getResultList();
+//    	posts.forEach(p -> System.out.println(p));
+    	
+//    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id IN (:ids)", Post.class).setParameter("ids", Arrays.asList(2, 56, 3, 76 , 99, 34)).getResultList();
+//    	posts.forEach(p -> System.out.println(p));
+    	
+//    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.title LIKE :post_title", Post.class).setParameter("post_title", "%8_").getResultList();
+//    	posts.forEach(p -> System.out.println(p));
+    	
+    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id BETWEEN :first AND :last", Post.class).setParameter("first", 76).setParameter("last", 82).getResultList();
     	posts.forEach(p -> System.out.println(p));
+    	
     	
     	em.getTransaction().commit();
     	em.close();
