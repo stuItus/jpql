@@ -54,8 +54,6 @@ public class App
     	Predicate allFourLessTen = cb.and(productNamePredicate, moreThanTen);
     	query.where(allFourLessTen);
 
-    	
-    	
     	List<Post> posts = em.createQuery(query).getResultList();
     	posts.forEach(p -> System.out.println(p));
     	
