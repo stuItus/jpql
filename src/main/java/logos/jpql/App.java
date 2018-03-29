@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
 import entity.Comment;
@@ -31,10 +32,29 @@ public class App
     	Root<Post> root = query.from(Post.class);
     	query.select(root);
     	
-    	Expression<Integer> idExpression = root.get("id");
-    	Predicate idPredicate = cb.greaterThan(idExpression, 85);
+//    	Expression<Integer> idExpression = root.get("id");
+//    	Predicate idPredicate = cb.greaterThan(idExpression, 85);
+//    	query.where(idPredicate);
     	
-    	query.where(idPredicate);
+    	Expression<Integer> idExpression = root.get("id");
+    	Predicate idMin = cb.greaterThanOrEqualTo(idExpression, 40);
+    	Predicate idMax = cb.lessThanOrEqualTo(idExpression, 60);
+    	Predicate idAll = cb.and(idMin, idMax);
+//    	query.where(idAll);
+    	
+    	Join<Post, Product> postJoinProduct = root.join("product");
+    	Expression<BigDecimal> priceExpression = postJoinProduct.get("price");
+    	Predicate pricePredicate = cb.between(priceExpression, new BigDecimal("30.00"), new BigDecimal("50.00"));
+//    	query.where(pricePredicate);
+    	
+    	Expression<String> productNameExpression = postJoinProduct.get("name");
+    	Expression<Integer> idExpression2 = root.get("id");
+    	Predicate productNamePredicate = cb.like(productNameExpression, "%4");
+    	Predicate moreThanTen = cb.greaterThanOrEqualTo(idExpression2, 10);
+    	Predicate allFourLessTen = cb.and(productNamePredicate, moreThanTen);
+    	query.where(allFourLessTen);
+
+    	
     	
     	List<Post> posts = em.createQuery(query).getResultList();
     	posts.forEach(p -> System.out.println(p));
