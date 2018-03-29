@@ -32,6 +32,10 @@ public class Post extends BaseEntity {
 				inverseJoinColumns = @JoinColumn(name = "tag_id"))
 	private List<Tag> tags = new ArrayList<Tag>();
 	
+	@OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id")
+	private Product product;
+	
 	@Override
 	public String toString() {
 		return "Post [title=" + title + ", content=" + content + ", status=" + status + ", getId()=" + getId() + "]";

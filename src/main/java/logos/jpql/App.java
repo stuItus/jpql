@@ -1,5 +1,6 @@
 package logos.jpql;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import javax.persistence.EntityManager;
@@ -8,6 +9,7 @@ import javax.persistence.Persistence;
 
 import entity.Comment;
 import entity.Post;
+import entity.Product;
 import entity.Tag;
 import entity.enums.Status;
 
@@ -41,18 +43,25 @@ public class App
 //    	List<Post> posts = em.createQuery("SELECT p FROM Post p WHERE p.id BETWEEN :first AND :last", Post.class).setParameter("first", 76).setParameter("last", 82).getResultList();
 //    	posts.forEach(p -> System.out.println(p));
     	
+//    	Post post = em.createQuery("SELECT p FROM Post p WHERE p.id = 5", Post.class).getSingleResult();
+//    	System.out.println(post);
+    	
+    	Post post = em.createQuery("SELECT p FROM Post p RIGHT JOIN FETCH p.product pp WHERE p.id = :id", Post.class).setParameter("id", 9).getSingleResult();
+    	System.out.println(post);
+//    	System.out.println(post.getProduct());
+    	
     	// *****************************************************//
 //    	Agreg functions
-    	Long count = em.createQuery("SELECT COUNT(c.id) FROM Comment c", Long.class).getSingleResult();
-    	System.out.println("Count :"+count);
-    	Long sum = em.createQuery("SELECT SUM(c.id) FROM Comment c", Long.class).getSingleResult();
-    	System.out.println("Sum :"+ sum);
-    	Double avg = em.createQuery("SELECT AVG(c.id) FROM Comment c", Double.class).getSingleResult();
-    	System.out.println("Average :"+avg);
-    	Integer max = em.createQuery("SELECT MAX(c.id) FROM Comment c", Integer.class).getSingleResult();
-    	System.out.println("Max :"+max);
-    	Integer min = em.createQuery("SELECT MIN(c.id) FROM Comment c", Integer.class).getSingleResult();
-    	System.out.println("Min :"+min);
+//    	Long count = em.createQuery("SELECT COUNT(c.id) FROM Comment c", Long.class).getSingleResult();
+//    	System.out.println("Count :"+count);
+//    	Long sum = em.createQuery("SELECT SUM(c.id) FROM Comment c", Long.class).getSingleResult();
+//    	System.out.println("Sum :"+ sum);
+//    	Double avg = em.createQuery("SELECT AVG(c.id) FROM Comment c", Double.class).getSingleResult();
+//    	System.out.println("Average :"+avg);
+//    	Integer max = em.createQuery("SELECT MAX(c.id) FROM Comment c", Integer.class).getSingleResult();
+//    	System.out.println("Max :"+max);
+//    	Integer min = em.createQuery("SELECT MIN(c.id) FROM Comment c", Integer.class).getSingleResult();
+//    	System.out.println("Min :"+min);
     	
     	em.getTransaction().commit();
     	em.close();
@@ -83,6 +92,14 @@ public class App
 			
 			if (i % 2 == 0) post.setStatus(Status.DRAFT); 
 			if (i % 2 == 1) post.setStatus(Status.PUBLISH); 
+			
+			Product product = new Product();
+			product.setName("Product name #" + i);
+			product.setDescription("Product description #"+i);
+			product.setPrice(new BigDecimal(i + 10 + ".00"));
+			product.setInStock(15 + i);
+			
+			post.setProduct(product);
 			
 			em.persist(post);
 			
