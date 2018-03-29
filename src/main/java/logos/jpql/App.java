@@ -6,6 +6,11 @@ import java.util.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Predicate;
 
 import entity.Comment;
 import entity.Post;
@@ -20,6 +25,20 @@ public class App
     	EntityManagerFactory factory = Persistence.createEntityManagerFactory("mysql");
     	EntityManager em = factory.createEntityManager();
     	em.getTransaction().begin();
+    	
+    	CriteriaBuilder cb = em.getCriteriaBuilder();
+    	CriteriaQuery<Post> query = cb.createQuery(Post.class);
+    	Root<Post> root = query.from(Post.class);
+    	query.select(root);
+    	
+    	Expression<Integer> idExpression = root.get("id");
+    	Predicate idPredicate = cb.greaterThan(idExpression, 85);
+    	
+    	query.where(idPredicate);
+    	
+    	List<Post> posts = em.createQuery(query).getResultList();
+    	posts.forEach(p -> System.out.println(p));
+    	
     	
 //    	addTags(em);
 //    	addPost(em);
@@ -46,8 +65,8 @@ public class App
 //    	Post post = em.createQuery("SELECT p FROM Post p WHERE p.id = 5", Post.class).getSingleResult();
 //    	System.out.println(post);
     	
-    	Post post = em.createQuery("SELECT p FROM Post p RIGHT JOIN FETCH p.product pp WHERE p.id = :id", Post.class).setParameter("id", 9).getSingleResult();
-    	System.out.println(post);
+//    	Post post = em.createQuery("SELECT p FROM Post p RIGHT JOIN FETCH p.product pp WHERE p.id = :id", Post.class).setParameter("id", 9).getSingleResult();
+//    	System.out.println(post);
 //    	System.out.println(post.getProduct());
     	
     	// *****************************************************//
